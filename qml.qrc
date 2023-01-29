@@ -5,6 +5,7 @@
         <file>Home.qml</file>
         <file>Manager.qml</file>
         <file>Stylist.qml</file>
+        <file>NumberPad.qml</file>
         <file>logo.png</file>
         <file>Waiting.qml</file>
         <file>ManagerJobs.qml</file>
@@ -16,6 +17,11 @@
         <file>Config.qml</file>
         <file>ManagerCustomers.qml</file>
         <file>MifareMethods.js</file>
-        <file>NumberPad.qml</file>
+        <file>BHoma.ttf</file>
+        <file>BKamran.ttf</file>
+        <file>BNazanin.ttf</file>
+        <file>BRoya.ttf</file>
+        <file>FButton.qml</file>
     </qresource>
+    <qresource prefix="/Fonts"/>
 </RCC>

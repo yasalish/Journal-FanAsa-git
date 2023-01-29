@@ -5,7 +5,6 @@ import "HttpService.js" as Service
 Rectangle {
     width: 800
     height: 480
-
     property var  header: [ // widths must add to 1
         {text: 'ID',     width: 0.15},
         {text: 'Customer',   width: 0.225},
@@ -16,19 +15,13 @@ Rectangle {
 
     color: "#fef0f0"
     border.color: "#221919"
-    Button {
+    FButton {
         id: button
         x: 210
         y: 25
-        width: 381
-        height: 64
-        text: qsTr("Show the waiting customers")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 15
-        palette {
-            button: "#ffa07a"
-        }
+        scale: 1
+        bText:"لیست انتظار مشتریان"
+        width:150
         onClicked: {
             Service.get_jobs(function(resp) {
             print('handle get stylists resp: ' + JSON.stringify(resp));
@@ -54,19 +47,11 @@ Rectangle {
              });
         }
     }
-    Button {
+    FButton {
         id: button4
-        x: 668
-        y: 402
-        width: 115
-        height: 53
-        text: qsTr("Back")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 20
-        palette {
-            button: "#ffa07a"
-        }
+        x: 660
+        y: 377
+        bText:"بازگشت"
         onClicked: {
             stackView.push("ManagerList.qml");
         }

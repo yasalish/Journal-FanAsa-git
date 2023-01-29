@@ -46,7 +46,7 @@ function request(verb,bASE,endpoint, obj, cb) {
              }
      }
     xhr.open(verb, bASE + (endpoint?'/' + endpoint:''));
-    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('Accept', 'application/json');
     var data = obj?JSON.stringify(obj):''
     xhr.send(data)

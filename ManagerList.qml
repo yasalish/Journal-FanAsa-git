@@ -6,77 +6,44 @@ Rectangle {
 
     color: "#fef0f0"
     border.color: "#221919"
-    Button {
+    FButton {
         id: button
-        x: 36
+        x: 154
         y: 163
-        width: 214
-        height: 64
-        text: qsTr("Job Page")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 20
-        palette {
-            button: "#ffa07a"
-        }
+        bText: "کار"
         onClicked: {
             stackView.push("ManagerJobs.qml");
         }
     }
-    Button {
+    FButton {
         id: button2
-        x: 289
+        x: 345
         y: 163
-        width: 199
-        height: 64
-        text: qsTr("Stylist Page")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 20
-        palette {
-            button: "#ffa07a"
-        }
+        bText: "آرایشگر"
         onClicked: {
             stackView.push("ManagerStyle.qml");
         }
     }
 
-    Button {
+    FButton {
         id: button3
-        x: 519
+        x: 553
         y: 163
-        width: 266
-        height: 64
-        text: qsTr("Customer Page")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 20
-        palette {
-            button: "#ffa07a"
-        }
+        bText: "مشتری"
         onClicked: {
             stackView.push("ManagerCustomers.qml");
         }
     }
 
 
-    Button {
+    FButton {
         id: button4
-        x: 685
-        y: 366
-        width: 95
-        height: 40
-        text: qsTr("Back")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 20
-        palette {
-            button: "#ffa07a"
-        }
+        x: 624
+        y: 362
+        bText: "بازگشت"
         onClicked: {
             stackView.push("Manager.qml");
         }
     }
-
 
 }

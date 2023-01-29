@@ -33,3 +33,5 @@ INSTALLS += target
 HEADERS += \
     fileio.h \
     serialport.h
+
+DISTFILES +=

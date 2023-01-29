@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.2
 import SerialPort 1.0
+import FileIO 1.0
 import "MifareMethods.js" as Mifare
 import "HttpService.js" as Service
 
@@ -9,12 +10,19 @@ Page {
     id:root
     width: 800
     height: 480
+    property alias button2: button2
     title: qsTr("Login")
 
     signal onStylistCodeChanged()
 
     property string stylistName: ''
     property var stylistCode:""
+
+    FileIO {
+        id: myFile
+        source: "Configs.json"
+        onError: console.log(msg)
+    }
 
     SerialPort{
             id: serial
@@ -42,22 +50,25 @@ Page {
         width: 200
         height: 200
         color: "#f0f5d6"
+        anchors.rightMargin: 0
+        anchors.bottomMargin: 0
+        anchors.leftMargin: 0
+        anchors.topMargin: 0
         anchors.fill:parent
         Label {
-            color: "#4b8bca"
-            text: qsTr("Please Enter your code")
-            font.family: "Times New Roman"
+            color: "#c71585"
+            text: qsTr("کارت را مقابل کارت خوان بگیرید یا کد را وارد نمایید:")
+            font.family: "B Roya"
             font.bold: true
-            anchors.verticalCenterOffset: -82
-            anchors.horizontalCenterOffset: -11
-            font.pointSize: 20
+            anchors.verticalCenterOffset: -113
+            anchors.horizontalCenterOffset: -7
+            font.pointSize: 22
             anchors.centerIn: rectangle1
         }
-
         Rectangle {
             id: rectangle
             x: 299
-            y: 215
+            y: 181
             width: 203
             height: 51
             color: "#fceded"
@@ -81,25 +92,14 @@ Page {
                 font.pixelSize: 28
             }
         }
-        Rectangle {
-            id: rectangle2
-            x: 255
-            y: 304
-            width: 98
-            height: 68
-            color: "#b8d7b5"
 
-            Button {
+        FButton {
                 id: button
-                text: qsTr("Login")
-                font.weight: Font.Bold
-                font.pointSize: 15
-                font.family: "Times New Roman"
-                anchors.fill:rectangle2
-                palette {
-                       button: "#ffa07a"
-                   }
+                bText: "ورود"
+                y:304
+                x:237
                 onClicked: {
+                    print(button.width)
                     var stylistid=textInput.text;
                     Service.login_stylist(stylistid,function(resp) {
                     print('handle get stylists resp: ' + JSON.stringify(resp));
@@ -121,58 +121,38 @@ Page {
                         dialog.open()
                     });
                 }
+           }
+
+        FButton {
+           id: button1
+            x: 665
+            y: 304
+            bText: "خروج"            
+            onClicked: {
+                Qt.quit()
             }
         }
 
-        Button {
-            id: button1
-            x: 650
-            y: 304
-            width: 100
-            height: 68
-            text: qsTr("Exit")
-            font.bold: true
-            font.pointSize: 15
-            font.family: "Times New Roman"
-            onClicked: Qt.quit()
-            palette {
-                   button: "#ffa07a"
-               }
-        }
-        Button {
+        FButton {
             id: button2
-            x: 382
+            x: 363
             y: 304
-            width: 100
-            height: 68
-            text: qsTr("Clear")
-            font.bold: true
-            font.pointSize: 15
-            font.family: "Times New Roman"
-            palette {
-                   button: "#ffa07a"
-               }
+            bText: "پاک کردن"
             onClicked: textInput.text=""
 
         }
-        Button {
+
+        FButton {
             id: button3
-            x: 520
+            x: 521
             y: 304
-            width: 100
-            height: 68
-            text: qsTr("Config")
-            font.bold: true
-            font.pointSize: 15
-            font.family: "Times New Roman"
-            palette {
-                   button: "#ffa07a"
-               }
+            bText: "تنظیمات"
             onClicked: {
                 stackView.push("Config.qml");
             }
 
         }
+
         NumberPad {
             id: numberPad
             y: 190
@@ -185,7 +165,7 @@ Page {
                     {
                           textInput.text += value;
                     }
-                    else if(value==11)
+                    else if(value==10)
                     {
                         textInput.text += ".";
                     }
@@ -196,17 +176,9 @@ Page {
                               st += textInput.text[i]
                           textInput.text=st
                           console.log(st)
-
                     }
             }
-        }
-        Image{
-            x: 544
-            y: 0
-            width: 256
-            height: 120
-            source:"logo.png"
-        }
+        }        
     }
     Dialog {
         id: dialog
@@ -216,10 +188,18 @@ Page {
                         }
         }
     Component.onCompleted: {
-            serial.open()
-            rcount=0
-            rdata=""
-            Mifare.sendReqACommnad();
+        var msg=JSON.parse(myFile.read())
+        print("IP Address = ",msg["IPAddr"])
+        print("Serial = ",msg["Port"])
+        var ip = msg["IPAddr"]
+        ipAddress=ip
+        serPort = msg["SerPort"]
+        print("IP Address = ",ipAddress,"Serial Port = ",serPort)
+        print("Component.onCompleted",serPort,"\t",ipAddress)
+        serial.open(serPort)
+        rcount=0
+        rdata=""
+        Mifare.sendReqACommnad();
                     }
     onStylistCodeChanged:
     {
@@ -250,5 +230,4 @@ Page {
         }
         });
     }
-
 }

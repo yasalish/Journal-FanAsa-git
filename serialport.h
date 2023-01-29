@@ -17,7 +17,7 @@ public:
 public slots:
     void onReadData();
     void onWriteData(QString data);
-    void open();
+    void open(QString port);
     void close();
 
 signals:

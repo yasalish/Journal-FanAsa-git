@@ -51,10 +51,10 @@ Rectangle {
         x: 254
         y: 22
         color: "#0d6583"
-        text: "Waiting for a job!"
+        text: "در انتظار انجام کار!"
         font.bold: true
         font.pointSize: 28
-        font.family: "Times New Roman"
+        font.family: "B Roya"
         font.pixelSize: 36
         visible:false
 
@@ -64,23 +64,23 @@ Rectangle {
         x: 232
         y: 48
         color: "#0d6583"
-        text: "A job is assigned to you!"
+        text: "یک کار به شما اختصاص یافت!"
         font.bold: true
         font.pointSize: 28
-        font.family: "Times New Roman"
+        font.family: "B Roya"
         font.pixelSize: 36
         visible:false
 
     }
     Text {
         id: element4
-        x: 232
+        x: 304
         y: 48
         color: "#0d6583"
-        text: "A job is starting!"
+        text: "کار شروع شد!"
         font.bold: true
         font.pointSize: 28
-        font.family: "Times New Roman"
+        font.family: "B Roya"
         font.pixelSize: 36
         visible:false
 
@@ -146,19 +146,12 @@ Rectangle {
         height: 158
         visible:false
     }
-    Button {
+    FButton {
         id: button
         x: 214
         y: 121
-        width: 389
-        height: 64
-        text: qsTr("Ready to get a Job")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 20
-        palette {
-               button: "#ffa07a"
-           }
+        width:150
+        bText:"آماده برای پذیرش کار"
         onClicked: {
             button.visible=false;
             element.visible=true;
@@ -170,20 +163,12 @@ Rectangle {
             })
         }
     }
-    Button {
+    FButton {
         id: button4
-        x: 256
-        y: 348
-        width: 306
-        height: 48
-        text: qsTr("Finish the Job")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 20
+        x: 331
+        y: 343
+        bText:"پایان کار"
         visible:false
-        palette {
-               button: "#ffa07a"
-           }
         onClicked: {
             print("Leaving Waiting Page .....")
             print(socket.destroy())
@@ -194,20 +179,12 @@ Rectangle {
 
         }
     }
-    Button {
+    FButton {
         id: button2
-        x: 247
+        x: 331
         y: 330
-        width: 307
-        height: 66
-        text: qsTr("Accept the Job")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 20
+        bText:"پذیرش کار"
         visible:false
-        palette {
-               button: "#ffa07a"
-           }
         onClicked: {
             Service.accept_job(jobID,function(resp) {
             print('handle get jobs resp: ' + JSON.stringify(resp));
@@ -230,20 +207,11 @@ Rectangle {
            // stackView.push("Stylist.qml",{stylistName : stylistName});
         }
     }
-    Button {
+    FButton {
         id: button3
         x: 653
         y: 379
-        width: 114
-        height: 66
-        text: qsTr("Back")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 20
-        visible:true
-        palette {
-               button: "#ffa07a"
-           }
+        bText:"بازگشت"
         onClicked: {
             print("Leaving Waiting Page .....")
             print(socket.destroy())

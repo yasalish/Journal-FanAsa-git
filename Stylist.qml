@@ -16,19 +16,11 @@ Rectangle {
         {text: 'Status',   width: 0.225},
     ]
 
-    Button {
+    FButton {
         id: button
-        x: 468
-        y: 398
-        width: 115
-        height: 64
-        text: qsTr("Stop")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 20
-        palette {
-            button: "#ffa07a"
-        }
+        x: 418
+        y: 372
+        bText:"پایان"
         onClicked: {
             print(stylistName)
             Service.logoff_stylist(stylistName,function(resp) {
@@ -38,19 +30,11 @@ Rectangle {
         }
     }
 
-    Button {
+    FButton {
         id: button2
-        x: 567
-        y: 78
-        width: 219
-        height: 61
-        text: qsTr("Show My Jobs")
-        font.bold: true
-        font.pointSize: 18
-        font.family: "Times New Roman"
-        palette {
-            button: "#ffa07a"
-        }
+        x: 621
+        y: 74
+        bText:"کارهای من"
         onClicked: {
             Service.get_job_name(stylistName,function(resp) {
             print('handle get stylists resp: ' + JSON.stringify(resp));
@@ -72,19 +56,11 @@ Rectangle {
         }
     }
 
-    Button {
+    FButton {
         id: button1
-        x: 252
-        y: 398
-        width: 120
-        height: 64
-        text: qsTr("Start")
-        font.bold: true
-        font.pointSize: 20
-        font.family: "Times New Roman"
-        palette {
-            button: "#ffa07a"
-        }
+        x: 253
+        y: 372
+        bText:"شروع"
         onClicked: {
             Service.ready_stylist(stylistName,function(resp) {
             print('handle get stylists resp: ' + JSON.stringify(resp));
@@ -95,31 +71,31 @@ Rectangle {
 
     Label {
         id: label
-        x: 297
-        y: 27
-        text: qsTr("Hello")
+        x: 107
+        y: 33
+        text: qsTr("سلام خوش آمدید!")
         color: "#4896e2"
         font.bold: true
         font.pointSize: 30
-        font.family: "Times New Roman"
+        font.family: "B Roya"
 
     }
 
     Label {
         id: label1
-        x: 425
-        y: 27
+        x: 367
+        y: 44
         text: qsTr("Label")
         color: "#4896e2"
         font.bold: true
         font.pointSize: 30
-        font.family: "Times New Roman"
+        font.family: "B Roya"
 
     }
     Rectangle {
         id: element1
-        x: 16
-        y: 138
+        x: 20
+        y: 105
         width: 559
         height: 249
         visible: false

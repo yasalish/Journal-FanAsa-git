@@ -7,6 +7,9 @@ import "MifareMethods.js" as Mifare
 Rectangle {
     width: 800
     height: 480
+
+    property string stylistName: ''
+
     property var  header1: [ // widths must add to 1
         {text: 'Code',     width: 0.15},
         {text: 'Name',      width: 0.225},
@@ -50,20 +53,13 @@ Rectangle {
 
     color: "#fef0f0"
     border.color: "#221919"
-    Button {
+    FButton {
         id: button
-        x: 8
+        x: 427
         y: 37
-        width: 155
-        height: 64
-        text: qsTr("All Stylists")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 15
-        palette {
-            button: "#ffa07a"
-        }
+        bText: "آرایشگران"
         onClicked: {
+            button5.visible=false
             Service.get_stylists(function(resp) {
             print('handle get stylists resp: ' + JSON.stringify(resp));
                 var stylists=[];
@@ -84,19 +80,11 @@ Rectangle {
              });
         }
     }
-    Button {
+    FButton {
         id: button2
-        x: 179
+        x: 253
         y: 37
-        width: 166
-        height: 64
-        text: qsTr("A Stylist")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 15
-        palette {
-            button: "#ffa07a"
-        }
+        bText: "آرایشگر"
         onClicked: {
             var stylistid=textInput.text
             stylistCode=stylistid
@@ -119,20 +107,14 @@ Rectangle {
             });
         }
     }
-    Button {
+    FButton {
         id: button3
-        x: 367
+        x: 16
         y: 37
-        width: 208
-        height: 64
-        text: qsTr("A Stylist Jobs")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 15
-        palette {
-            button: "#ffa07a"
-        }
+        width:110
+        bText: "کارهای آرایشگر"
         onClicked: {
+            button5.visible=false
             var stylistid=textInput.text;
             Service.get_stylist_jobs(stylistid,function(resp) {
             print('handle get stylists resp: ' + JSON.stringify(resp));
@@ -157,38 +139,23 @@ Rectangle {
         }
     }
 
-    Button {
+    FButton {
         id: button4
-        x: 668
-        y: 402
-        width: 115
-        height: 53
-        text: qsTr("Back")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 20
-        palette {
-            button: "#ffa07a"
-        }
+        x: 643
+        y: 392
+        bText: "بازگشت"
         onClicked: {
             serial.close()
             stackView.push("ManagerList.qml");
         }
     }
-    Button {
+    FButton {
         id: button5
         x: 140
         y: 367
-        width: 417
-        height: 53
-        text: qsTr("Register Stylist Card")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 20
+        width:120
+        bText: "ثبت کارت آرایشگر"
         visible: false
-        palette {
-            button: "#ffa07a"
-        }
         onClicked: {
             serial.open()
             rcount=0
@@ -196,7 +163,6 @@ Rectangle {
             Mifare.sendReqACommnad();
         }
     }
-
     Rectangle {
         id: element1
         x: 16
@@ -209,6 +175,8 @@ Rectangle {
             anchors.fill: parent
             onClicked: {
                          print('onClicked', row, JSON.stringify(rowData))
+                        stylistName=rowData[1]
+                        stackView.push("Stylist.qml",{stylistName : stylistName});
             }
         }
     }
@@ -223,13 +191,17 @@ Rectangle {
             Table {
                 id:table2
                 anchors.fill: parent
-                onClicked: print('onClicked', row, JSON.stringify(rowData))
+                onClicked: {
+                    print('onClicked', row, JSON.stringify(rowData))
+                    stylistName=rowData[1]
+                    stackView.push("Stylist.qml",{stylistName : stylistName});
+                }
             }
         }
     Rectangle {
         id: rectangle
-        x: 652
-        y: 79
+        x: 587
+        y: 64
         width: 123
         height: 37
         color: "#e2fff0"
@@ -251,17 +223,17 @@ Rectangle {
     }
     NumberPad {
         id: numberPad
-        y: 129
+        y: 112
         width: 125
         height: 100
-        anchors.horizontalCenterOffset: 258
+        anchors.horizontalCenterOffset: 250
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: {
                 if(value>=0 && value<=9)
                 {
                       textInput.text += value;
                 }
-                else if(value==11)
+                else if(value==10)
                 {
                     textInput.text += ".";
                 }
@@ -276,23 +248,24 @@ Rectangle {
         }
     }
 
-    Label {
+   Label {
         id: label
-        x: 652
-        y: 45
+        x: 587
+        y: 31
         width: 123
         height: 20
-        text: qsTr("Stylist Code")
+        text: qsTr("کد آرایشگر")
         font.pointSize: 17
         font.bold: true
-        font.family: "Times New Roman"
+        font.family: "B Roya"
         horizontalAlignment: Text.AlignHCenter
     }
     Dialog {
         id: dialog
                     title: qsTr("FanAsa")
                     Label {
-                            text: "Successful Registration"
+                            text: "ثبت نام موفقیت آمیز بود"
+                            font.family: "B Roya"
                         }
                     modal: true
                     standardButtons: Dialog.Ok

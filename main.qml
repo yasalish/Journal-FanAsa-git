@@ -4,6 +4,7 @@ import FileIO 1.0
 import SerialPort 1.0
 import "MifareMethods.js" as Mifare
 
+
 ApplicationWindow {
     id: window
     visible: true
@@ -11,6 +12,7 @@ ApplicationWindow {
     height: 480
     title: qsTr("FanAsa")
 
+    property var serPort : ""
     property var ipAddress : ""
     property var bASE : "http://"+ipAddress+":5000/"
     property var bASE1 : bASE+"jobs";
@@ -40,18 +42,10 @@ ApplicationWindow {
                             "8fd0a4f256e9"
                          ]
 
-    FileIO {
-        id: myFile
-        source: "Configs.json"
-        onError: console.log(msg)
-    }
+
 
     Component.onCompleted: {
-            var msg=JSON.parse(myFile.read())
-            print("IP Address = ",msg["IPAddr"])
-            var ip = msg["IPAddr"]
-            ipAddress=ip
-            print("IP Address = ",ipAddress)
+        print("MAIN IP Address = ",ipAddress,"Serial Port = ",serPort)
             }
 
     StackView {

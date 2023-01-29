@@ -43,27 +43,17 @@ void SerialPort::close()
 {
     rfid->close();
     qDebug()<<"Close the serial port**\n";
-
 }
 
-
-void SerialPort::open()
+void SerialPort::open(QString port)
 {
-    qDebug()<<"Open the serial port**\n";
+    qDebug()<<"Open the serial port\t"<<port;
     for(auto info: QSerialPortInfo::availablePorts()){
-        qDebug()<<info.portName()<<info.description()<<info.manufacturer();
-        //if(!info.isBusy() && (info.description().contains("USB Serial Devic") || info.manufacturer().contains("Microsoft"))){
-        if(info.portName()=="ttyS3"){
-            portInfo = info;
-            break;
-        }
-    }
-
-    if(portInfo.isNull()){
-        return;
-    }
-    qDebug()<<portInfo.portName();
-    rfid->setPortName(portInfo.portName());
+        qDebug()<<info.portName()<<info.description()<<info.manufacturer();        
+    }    
+    //portInfo.portName()=port;
+    //qDebug()<<"#################  "<<portInfo.portName();
+    rfid->setPortName(port);
     rfid->setBaudRate(QSerialPort::Baud115200);
     rfid->setDataBits(QSerialPort::Data8);
     rfid->setParity(QSerialPort::NoParity);

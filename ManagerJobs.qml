@@ -16,19 +16,11 @@ Rectangle {
 
     color: "#fef0f0"
     border.color: "#221919"
-    Button {
+    FButton {
         id: button
-        x: 16
-        y: 37
-        width: 178
-        height: 64
-        text: qsTr("Show All Jobs")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 15
-        palette {
-            button: "#ffa07a"
-        }
+        x: 363
+        y: 15
+        bText:"تمام کارها"
         onClicked: {
             Service.get_jobs(function(resp) {
             print('handle get jobs resp: ' + JSON.stringify(resp));
@@ -50,19 +42,11 @@ Rectangle {
              });
         }
     }
-    Button {
+    FButton {
         id: button2
-        x: 200
-        y: 37
-        width: 167
-        height: 64
-        text: qsTr("Show the job")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 15
-        palette {
-            button: "#ffa07a"
-        }
+        x: 218
+        y: 15
+        bText:"کار"
         onClicked: {            
             var jobid=textInput.text;
             Service.get_job(jobid,function(resp) {
@@ -83,19 +67,11 @@ Rectangle {
             });
         }
     }
-    Button {
+    FButton {
         id: button3
-        x: 383
-        y: 37
-        width: 192
-        height: 64
-        text: qsTr("Assign the job")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 15
-        palette {
-            button: "#ffa07a"
-        }
+        x: 32
+        y: 15
+        bText:"تخصیص کار"
         onClicked: {
             var jobid=textInput.text;
             Service.assign_job(jobid,function(resp) {
@@ -116,19 +92,11 @@ Rectangle {
             });
         }
     }
-    Button {
+    FButton {
         id: button4
-        x: 676
-        y: 398
-        width: 107
-        height: 57
-        text: qsTr("Back")
-        font.family: "Times New Roman"
-        font.bold: true
-        font.pointSize: 20
-        palette {
-            button: "#ffa07a"
-        }
+        x: 608
+        y: 379
+        bText:"بازگشت"
         onClicked: {
             stackView.push("ManagerList.qml");
         }
@@ -166,8 +134,8 @@ Rectangle {
 
     Rectangle {
         id: rectangle
-        x: 652
-        y: 79
+        x: 548
+        y: 53
         width: 123
         height: 37
         color: "#e2fff0"
@@ -189,17 +157,17 @@ Rectangle {
     }
     NumberPad {
         id: numberPad
-        y: 129
+        y: 96
         width: 125
         height: 100
-        anchors.horizontalCenterOffset: 258
+        anchors.horizontalCenterOffset: 251
         anchors.horizontalCenter: parent.horizontalCenter
         onClicked: {
                 if(value>=0 && value<=9)
                 {
                       textInput.text += value;
                 }
-                else if(value==11)
+                else if(value==10)
                 {
                     textInput.text += ".";
                 }
@@ -214,17 +182,16 @@ Rectangle {
                 }
         }
     }
-
-    Label {
+Label {
         id: label
-        x: 652
-        y: 45
+        x: 553
+        y: 15
         width: 123
         height: 20
-        text: qsTr("Job Code")
+        text: qsTr("شماره کار")
         font.pointSize: 17
         font.bold: true
-        font.family: "Times New Roman"
+        font.family: "B Roya"
         horizontalAlignment: Text.AlignHCenter
     }
 }
