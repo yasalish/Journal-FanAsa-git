@@ -8,8 +8,13 @@
         <file>NumberPad.qml</file>
         <file>logo.png</file>
         <file>Waiting.qml</file>
-        <file>ManagerList.qml</file>
+        <file>ManagerJobs.qml</file>
         <file>Table.qml</file>
-        <file>ManagerList2.qml</file>
+        <file>ManagerList.qml</file>
+        <file>HttpService.js</file>
+        <file>ManagerStyle.qml</file>
+        <file>Methods.js</file>
+        <file>Config.qml</file>
+        <file>ManagerCustomers.qml</file>
     </qresource>
 </RCC>

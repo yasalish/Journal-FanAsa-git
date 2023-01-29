@@ -2,15 +2,23 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.2
 import "HttpService.js" as Service
+import FileIO 1.0
 
 
 Page {
     id:root
     width: 800
     height: 480
-    title: qsTr("Login")
+    title: qsTr("Config")
 
-    property string stylistName: ''    
+    property string stylistName: ''
+
+    FileIO {
+        id: myFile
+        source: "Configs.json"
+        onError: console.log(msg)
+    }
+
 
     Rectangle {
         id: rectangle1
@@ -22,20 +30,20 @@ Page {
         anchors.fill:parent
         Label {
             color: "#4b8bca"
-            text: qsTr("Please Enter your code")
+            text: qsTr("Please Enter the server IP address:")
             font.family: "Times New Roman"
             font.bold: true
-            anchors.verticalCenterOffset: -82
-            anchors.horizontalCenterOffset: -11
-            font.pointSize: 20
+            anchors.verticalCenterOffset: -109
+            anchors.horizontalCenterOffset: 23
+            font.pointSize: 23
             anchors.centerIn: rectangle1
         }
 
         Rectangle {
             id: rectangle
-            x: 299
+            x: 269
             y: 215
-            width: 203
+            width: 317
             height: 51
             color: "#fceded"
             radius: 0
@@ -49,7 +57,7 @@ Page {
                 width: 80
                 height: 20
                 color: "#f05c5c"
-                text: qsTr("111")
+                text: qsTr("192.168.1.7")
                 anchors.rightMargin: 0
                 anchors.bottomMargin: -8
                 anchors.leftMargin: 0
@@ -70,7 +78,7 @@ Page {
 
             Button {
                 id: button
-                text: qsTr("Login")
+                text: qsTr("Submit")
                 font.weight: Font.Bold
                 font.pointSize: 15
                 font.family: "Times New Roman"
@@ -78,45 +86,39 @@ Page {
                 palette {
                        button: "#ffa07a"
                    }
-                onClicked: {                   
-                    var stylistid=textInput.text;
-                    Service.login_stylist(stylistid,function(resp) {
-                    print('handle get stylists resp: ' + JSON.stringify(resp));
-                    var name = resp["Name"];
-                    console.log(name);
-                    if(name === 'Manager')
-                            stackView.push("Manager.qml");
-                    else if(name !== 'Unknown')
-                        {
-                            root.stylistName=name;
-                            console.log(root.stylistName)
-                            stackView.push("Stylist.qml",{stylistName : stylistName});
-                        }
-                    else
-                        dialog.open()
-                    });
+                onClicked: {
+                    print("***************")
+                    print(ipAddress)
+                    ipAddress=textInput.text;
+                    print(ipAddress)
+                    var ip_add="{\"IPAddr\": \""+ipAddress+"\"}";
+                    print(ip_add);
+                    myFile.write(ip_add)
+                    stackView.push("Home.qml");
                 }
             }
         }
 
         Button {
             id: button1
-            x: 650
+            x: 500
             y: 304
             width: 100
             height: 68
-            text: qsTr("Exit")
+            text: qsTr("Back")
             font.bold: true
             font.pointSize: 15
             font.family: "Times New Roman"
-            onClicked: Qt.quit()
+            onClicked: {
+                stackView.push("Home.qml");
+            }
             palette {
                    button: "#ffa07a"
                }
         }
         Button {
             id: button2
-            x: 382
+            x: 372
             y: 304
             width: 100
             height: 68
@@ -128,24 +130,6 @@ Page {
                    button: "#ffa07a"
                }
             onClicked: textInput.text=""
-
-        }
-        Button {
-            id: button3
-            x: 520
-            y: 304
-            width: 100
-            height: 68
-            text: qsTr("Config")
-            font.bold: true
-            font.pointSize: 15
-            font.family: "Times New Roman"
-            palette {
-                   button: "#ffa07a"
-               }
-            onClicked: {
-                stackView.push("Config.qml");
-            }
 
         }
         NumberPad {
@@ -174,13 +158,6 @@ Page {
 
                     }
             }
-        }
-        Image{
-            x: 544
-            y: 0
-            width: 256
-            height: 120
-            source:"logo.png"
         }
     }
     Dialog {

@@ -35,16 +35,25 @@ Item {
             btn.text = num
             btn.width = 60
             btn.height = 60
+            btn.font.pixelSize=15
+            btn.font.bold=true
             num++
         }
         num=10
         var btn = Qt.createQmlObject('import QtQuick 2.0; import QtQuick.Controls 2.3; Button {id: btn' + i +'; onClicked:doClicked('+ num +') }',grid,"DynamicallyLoaded")
-        btn.text = '<-'
+        btn.text = 'X'
         btn.width = 60
         btn.height = 60
-        var obj = grid.children[grid.children.length - 1]
-       // obj.parent = col
-       // obj.width = (40 * grid.columns) + 10
+        btn.font.pixelSize=15
+        btn.font.bold=true
+        //var obj = grid.children[grid.children.length - 1]
+        num=11
+        btn = Qt.createQmlObject('import QtQuick 2.0; import QtQuick.Controls 2.3; Button {id: btn' + i +'; onClicked:doClicked('+ num +') }',grid,"DynamicallyLoaded")
+        btn.text = '.'
+        btn.width = 60
+        btn.height = 60
+        btn.font.pixelSize=15
+        btn.font.bold=true
     }
 
 

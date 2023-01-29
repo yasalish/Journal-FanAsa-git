@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
+import "HttpService.js" as Service
 
 Rectangle {
     width: 800
@@ -28,7 +29,10 @@ Rectangle {
         palette {
                button: "#ffa07a"
            }
-        onClicked: {
+        onClicked: {            
+            Service.logoff_stylist("Manager",function(resp) {
+            print('handle get stylists resp: ' + JSON.stringify(resp));
+            });
             stackView.push("Home.qml");
         }
     }
@@ -46,6 +50,9 @@ Rectangle {
                button: "#ffa07a"
            }
         onClicked: {
+            Service.ready_stylist("Manager",function(resp) {
+            print('handle get stylists resp: ' + JSON.stringify(resp));
+            });
             stackView.push("ManagerList.qml");
         }
     }
