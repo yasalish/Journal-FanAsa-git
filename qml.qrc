@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>Home.qml</file>
+        <file>Manager.qml</file>
+        <file>Stylist.qml</file>
+        <file>NumberPad.qml</file>
+        <file>logo.png</file>
+        <file>Waiting.qml</file>
+        <file>ManagerList.qml</file>
+        <file>Table.qml</file>
+        <file>ManagerList2.qml</file>
+    </qresource>
+</RCC>
