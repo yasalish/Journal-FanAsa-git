@@ -1,4 +1,4 @@
-QT += quick
+QT += quick serialport
 
 CONFIG += c++11
 
@@ -15,7 +15,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         fileio.cpp \
-        main.cpp
+        main.cpp \
+        serialport.cpp
 
 RESOURCES += qml.qrc
 
@@ -30,4 +31,5 @@ target.path = /home/root/Qt
 INSTALLS += target
 
 HEADERS += \
-    fileio.h
+    fileio.h \
+    serialport.h

@@ -109,6 +109,6 @@ function get_stylist(id, cb) {
 }
 
 function get_stylist_jobs(id, cb) {
-    var endpoint="id/"+id
+    var endpoint="jobs/"+id
     request('GET', bASE2 ,endpoint, null, cb)
 }

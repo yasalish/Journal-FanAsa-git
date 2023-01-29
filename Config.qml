@@ -134,10 +134,10 @@ Page {
         }
         NumberPad {
             id: numberPad
-            y: 215
+            y: 185
             width: 125
             height: 100
-            anchors.horizontalCenterOffset: -297
+            anchors.horizontalCenterOffset: -321
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
                     if(value>=0 && value<=9)

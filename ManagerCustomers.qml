@@ -9,9 +9,9 @@ Rectangle {
     property var  header: [ // widths must add to 1
         {text: 'ID',     width: 0.15},
         {text: 'Customer',   width: 0.225},
-        {text: 'Stylist',   width: 0.225},
+        {text: 'Stylist',   width: 0.2},
         {text: 'Queue',   width: 0.15},
-        {text: 'WaitingTime', width: 0.25},
+        {text: 'WaitingTime', width: 0.275},
     ]
 
     color: "#fef0f0"
@@ -75,7 +75,7 @@ Rectangle {
         id: element1
         x: 16
         y: 120
-        width: 559
+        width: 600
         height: 300
         visible: false
         Table {

@@ -45,7 +45,7 @@ Rectangle {
         id: button3
         x: 519
         y: 163
-        width: 199
+        width: 266
         height: 64
         text: qsTr("Customer Page")
         font.family: "Times New Roman"

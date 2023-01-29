@@ -1,6 +1,9 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QSerialPort>
 #include "fileio.h"
+#include "serialport.h"
+
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
@@ -9,6 +12,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     qmlRegisterType<FileIO, 1>("FileIO", 1, 0, "FileIO");
+    qmlRegisterType<SerialPort, 1>("SerialPort", 1, 0, "SerialPort");
+
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

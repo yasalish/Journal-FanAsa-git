@@ -1,6 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 import "HttpService.js" as Service
+import SerialPort 1.0
+import "MifareMethods.js" as Mifare
 
 Rectangle {
     width: 800
@@ -9,18 +11,42 @@ Rectangle {
         {text: 'Code',     width: 0.15},
         {text: 'Name',      width: 0.225},
         {text: 'IP Address', width: 0.25},
-        {text: 'Status',   width: 0.225},
-        {text: 'Queue',   width: 0.15},
+        {text: 'Status',   width: 0.2},
+        {text: 'Queue',   width: 0.175},
     ]
-
     property var  header2: [ // widths must add to 1
         {text: 'ID',     width: 0.1},
         {text: 'Stylist',   width: 0.175},
         {text: 'Customer',   width: 0.2},
         {text: 'Type',   width: 0.175},
-        {text: 'Status',   width: 0.2},
-        {text: 'Queue',   width: 0.15},
+        {text: 'Status',   width: 0.175},
+        {text: 'Queue',   width: 0.175},
     ]
+    property var stylistCode:""
+
+    SerialPort{
+            id: serial
+            onDataReceived: {
+                        rcount++
+                        print("onDataReceived -> ",data,"\t",rcount,"\t",data.length)
+                        rdata=data
+                        switch(rcount)
+                            {
+                                case 1: Mifare.sendAntiCollisionCommnad();break;
+                                case 2: Mifare.sendSelectCommand();break;
+                                case 3: Mifare.sendAuthKeyB();break;
+                                case 4: Mifare.readMifare();break;
+                                case 5: Mifare.writeMifare(stylistCode);break;
+                                case 6:
+                                    if(Mifare.confirmWriteCode())
+                                    {
+                                        serial.close();
+                                        dialog.open()
+                                    }
+                                    break;
+                             }
+                    }
+        }
 
     color: "#fef0f0"
     border.color: "#221919"
@@ -72,9 +98,11 @@ Rectangle {
             button: "#ffa07a"
         }
         onClicked: {
-            var stylistid=textInput.text;
+            var stylistid=textInput.text
+            stylistCode=stylistid
+            print("stylist_code--?",stylistCode)
             Service.get_stylist(stylistid,function(resp) {
-            print('handle get stylists resp: ' + JSON.stringify(resp));
+            print('handle get stylists resp: ' + JSON.stringify(resp))
                 var stylists=[]
                 var stylist=[]
                 stylist.push(resp["StylistID"]);
@@ -87,6 +115,7 @@ Rectangle {
                 table2.headerModel=header1
                 table2.dataModel=stylists
                 element2.visible=true
+                button5.visible=true
             });
         }
     }
@@ -142,9 +171,32 @@ Rectangle {
             button: "#ffa07a"
         }
         onClicked: {
+            serial.close()
             stackView.push("ManagerList.qml");
         }
     }
+    Button {
+        id: button5
+        x: 140
+        y: 367
+        width: 417
+        height: 53
+        text: qsTr("Register Stylist Card")
+        font.family: "Times New Roman"
+        font.bold: true
+        font.pointSize: 20
+        visible: false
+        palette {
+            button: "#ffa07a"
+        }
+        onClicked: {
+            serial.open()
+            rcount=0
+            rdata=""
+            Mifare.sendReqACommnad();
+        }
+    }
+
     Rectangle {
         id: element1
         x: 16
@@ -160,6 +212,7 @@ Rectangle {
             }
         }
     }
+
     Rectangle {
             id: element2
             x: 16
@@ -173,7 +226,6 @@ Rectangle {
                 onClicked: print('onClicked', row, JSON.stringify(rowData))
             }
         }
-
     Rectangle {
         id: rectangle
         x: 652
@@ -220,7 +272,6 @@ Rectangle {
                           st += textInput.text[i]
                       textInput.text=st
                       console.log(st)
-
                 }
         }
     }
@@ -237,4 +288,15 @@ Rectangle {
         font.family: "Times New Roman"
         horizontalAlignment: Text.AlignHCenter
     }
-}
+    Dialog {
+        id: dialog
+                    title: qsTr("FanAsa")
+                    Label {
+                            text: "Successful Registration"
+                        }
+                    modal: true
+                    standardButtons: Dialog.Ok
+                    x: (parent.width - width) / 2
+                    y: (parent.height - height) / 2
+        }
+    }

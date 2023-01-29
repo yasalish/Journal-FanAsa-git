@@ -10,8 +10,8 @@ Rectangle {
         {text: 'Stylist',   width: 0.175},
         {text: 'Customer',   width: 0.2},
         {text: 'Type',   width: 0.175},
-        {text: 'Status',   width: 0.2},
-        {text: 'Queue',   width: 0.15},
+        {text: 'Status',   width: 0.175},
+        {text: 'Queue',   width: 0.175},
     ]  
 
     color: "#fef0f0"

@@ -1,8 +1,9 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.2
+import SerialPort 1.0
+import "MifareMethods.js" as Mifare
 import "HttpService.js" as Service
-
 
 Page {
     id:root
@@ -10,7 +11,29 @@ Page {
     height: 480
     title: qsTr("Login")
 
-    property string stylistName: ''    
+    signal onStylistCodeChanged()
+
+    property string stylistName: ''
+    property var stylistCode:""
+
+    SerialPort{
+            id: serial
+            onDataReceived: {
+                        rcount++
+                        print("onDataReceived -> ",data,"\t",rcount,"\t",data.length)
+                        rdata=data
+                        switch(rcount)
+                            {
+                                case 1: Mifare.sendAntiCollisionCommnad();break;
+                                case 2: Mifare.sendSelectCommand();break;
+                                case 3: Mifare.sendAuthKeyB();break;
+                                case 4: Mifare.readMifare();break;
+                                case 5: stylistCode = Mifare.retStylistCode();
+                                        print(stylistCode);
+                                        break;
+                             }
+                    }
+        }
 
     Rectangle {
         id: rectangle1
@@ -40,7 +63,6 @@ Page {
             color: "#fceded"
             radius: 0
             border.color: "#d40e0e"
-
             TextInput {
                 id: textInput
                 anchors.fill:rectangle
@@ -59,7 +81,6 @@ Page {
                 font.pixelSize: 28
             }
         }
-
         Rectangle {
             id: rectangle2
             x: 255
@@ -78,16 +99,20 @@ Page {
                 palette {
                        button: "#ffa07a"
                    }
-                onClicked: {                   
+                onClicked: {
                     var stylistid=textInput.text;
                     Service.login_stylist(stylistid,function(resp) {
                     print('handle get stylists resp: ' + JSON.stringify(resp));
                     var name = resp["Name"];
                     console.log(name);
                     if(name === 'Manager')
+                    {
+                            serial.close();
                             stackView.push("Manager.qml");
+                    }
                     else if(name !== 'Unknown')
                         {
+                            serial.close();
                             root.stylistName=name;
                             console.log(root.stylistName)
                             stackView.push("Stylist.qml",{stylistName : stylistName});
@@ -150,10 +175,10 @@ Page {
         }
         NumberPad {
             id: numberPad
-            y: 215
+            y: 190
             width: 125
             height: 100
-            anchors.horizontalCenterOffset: -297
+            anchors.horizontalCenterOffset: -319
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
                     if(value>=0 && value<=9)
@@ -190,4 +215,40 @@ Page {
                             text: "You are not authorized!"
                         }
         }
+    Component.onCompleted: {
+            serial.open()
+            rcount=0
+            rdata=""
+            Mifare.sendReqACommnad();
+                    }
+    onStylistCodeChanged:
+    {
+        print("*******  onStylistCodeChanged    *************",stylistCode)
+        var stylistid=stylistCode;
+        Service.login_stylist(stylistid,function(resp) {
+        print('handle get stylists resp: ' + JSON.stringify(resp));
+        var name = resp["Name"];
+        console.log(name);
+        if(name === 'Manager')
+        {
+                serial.close();
+                stackView.push("Manager.qml");
+
+        }
+        else if(name !== 'Unknown')
+            {
+                serial.close();
+                root.stylistName=name;
+                console.log(root.stylistName)
+                stackView.push("Stylist.qml",{stylistName : stylistName});
+            }
+        else{
+            dialog.open()
+            rcount=0
+            rdata=""
+            Mifare.sendReqACommnad();
+        }
+        });
+    }
+
 }

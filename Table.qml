@@ -29,7 +29,7 @@ Item { // size controlled by width
 
         width: parent.width;  height: 0.14 * root.width
         color: 'green'
-        radius: 0.03 * root.width
+        //radius: 0.03 * root.width
 
         Rectangle { // half height to cover bottom rounded corners
             width: parent.width;  height: 0.5 * parent.height
@@ -46,7 +46,7 @@ Item { // size controlled by width
             delegate: Item { // cell
                 width: modelData.width * root.width;  height: header.height
                 Text {
-                    x: 0.03 * root.width
+                    x: 0.02 * root.width
                     text: modelData.text
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: 0.04 * root.width
