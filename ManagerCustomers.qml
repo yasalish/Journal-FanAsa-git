@@ -5,6 +5,7 @@ import "HttpService.js" as Service
 Rectangle {
     width: 800
     height: 480
+   /*
     property var  header: [ // widths must add to 1
         {text: 'ID',     width: 0.15},
         {text: 'Customer',   width: 0.225},
@@ -12,7 +13,14 @@ Rectangle {
         {text: 'Queue',   width: 0.15},
         {text: 'WaitingTime', width: 0.275},
     ]
-
+    */
+    property var  header: [ // widths must add to 1
+        {text: 'زمان انتظار',     width: 0.275},
+        {text: 'صف',   width: 0.15},
+        {text: 'آرایشگر',   width: 0.225},
+        {text: 'مشتری',   width: 0.225},
+        {text: 'شماره', width: 0.15},
+    ]
     color: "#fef0f0"
     border.color: "#221919"
     FButton {
@@ -29,14 +37,15 @@ Rectangle {
                 for(var i=0;i<resp.length;i++)
                 {
 
-                    if(resp[i]["Status"]==="Assigned")
+                    if(resp[i]["Status"]==="اختصاص داده")
                     {
                         var job=[]
-                        job.push(resp[i]["ID"]);
-                        job.push(resp[i]["Customer"]);
-                        job.push(resp[i]["Stylist"]);
-                        job.push(resp[i]["QNumber"]);
+
                         job.push(resp[i]["QWating"]);
+                        job.push(resp[i]["QNumber"]);
+                        job.push(resp[i]["Stylist"]);
+                        job.push(resp[i]["Customer"]);
+                        job.push(resp[i]["ID"]);
                         jobs.push(job);
                     }
                 }

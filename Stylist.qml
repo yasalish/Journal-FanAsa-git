@@ -9,17 +9,18 @@ Rectangle {
     color: "#fef0f0"
 
     property var  header: [ // widths must add to 1
-        {text: 'ID',     width: 0.1},
-        {text: 'Stylist',   width: 0.225},
-        {text: 'Customer',   width: 0.225},
-        {text: 'Type',   width: 0.225},
-        {text: 'Status',   width: 0.225},
+        {text: 'صف',     width: 0.1},
+        {text: 'وضعیت',   width: 0.2},
+        {text: 'خدمت',   width: 0.2},
+        {text: 'مشتری',   width: 0.175},
+        {text: 'آرایشگر',   width: 0.175},
+        {text: 'شماره',   width: 0.15},
     ]
 
     FButton {
         id: button
-        x: 418
-        y: 372
+        x: 238
+        y: 375
         bText:"پایان"
         onClicked: {
             print(stylistName)
@@ -42,11 +43,12 @@ Rectangle {
                 for(var i=0;i<resp.length;i++)
                 {
                     var job=[]
-                    job.push(resp[i]["ID"]);
-                    job.push(resp[i]["Stylist"]);
-                    job.push(resp[i]["Customer"]);
-                    job.push(resp[i]["Type"]);
+                    job.push(resp[i]["QNumber"]);
                     job.push(resp[i]["Status"]);
+                    job.push(resp[i]["Type"]);
+                    job.push(resp[i]["Customer"]);
+                    job.push(resp[i]["Stylist"]);
+                    job.push(resp[i]["ID"]);
                     jobs.push(job);
                 }
                 table1.dataModel=jobs
@@ -58,8 +60,8 @@ Rectangle {
 
     FButton {
         id: button1
-        x: 253
-        y: 372
+        x: 406
+        y: 375
         bText:"شروع"
         onClicked: {
             Service.ready_stylist(stylistName,function(resp) {
@@ -71,26 +73,24 @@ Rectangle {
 
     Label {
         id: label
-        x: 107
-        y: 33
-        text: qsTr("سلام خوش آمدید!")
+        x: 215
+        y: 8
+        text: label1.text+" خوش آمدی!"
         color: "#4896e2"
         font.bold: true
         font.pointSize: 30
         font.family: "B Roya"
-
     }
-
     Label {
         id: label1
-        x: 367
-        y: 44
+        x: 419
+        y: 8
         text: qsTr("Label")
         color: "#4896e2"
         font.bold: true
         font.pointSize: 30
         font.family: "B Roya"
-
+        visible:false
     }
     Rectangle {
         id: element1
@@ -103,9 +103,96 @@ Rectangle {
             id:table1
             anchors.fill: parent
             onClicked: {
-                         print('onClicked', row, JSON.stringify(rowData))
+                print('onClicked', row, JSON.stringify(rowData))
             }
         }
     }
+
+    Rectangle {
+        id: stylistStatus
+        x: 635
+        y: 202
+        width: 98
+        height: 76
+        color: "blue"
+        radius: 32
+    }
+
+    Rectangle {
+        id: stylistQueue
+        x: 635
+        y: 312
+        width: 98
+        height: 76
+        color: "#ffffff"
+        radius: 32
+    }
+    SequentialAnimation {
+            loops: Animation.Infinite
+            running: true
+            OpacityAnimator {
+                        target: stylistStatus
+                        from: 0.5
+                        to: 1
+                        duration: 500
+                    }
+            OpacityAnimator {
+                        target: stylistStatus
+                        from: 1
+                        to: 0.5
+                        duration: 500
+            }
+    }
+    SequentialAnimation {
+            loops: Animation.Infinite
+            running: true
+            OpacityAnimator {
+                        target: stylistQueue
+                        from: 0.5
+                        to: 1
+                        duration: 500
+                    }
+            OpacityAnimator {
+                        target: stylistQueue
+                        from: 1
+                        to: 0.5
+                        duration: 500
+            }
+    }
+
+    Label {
+        id: label2
+        x: 635
+        y: 167
+        width: 80
+        height: 13
+        color: "#a60dd4"
+        text: qsTr("وضعیت")
+        font.pointSize: 18
+        font.family: "B Roya"
+        font.bold: true
+    }
+
+    Label {
+        id: label3
+        x: 621
+        y: 279
+        width: 80
+        height: 13
+        color: "#a60dd4"
+        text: qsTr("صف")
+        font.family: "B Roya"
+        font.pointSize: 18
+        font.bold: true
+    }
+    Component.onCompleted: {
+        Service.get_stylist_name(stylistName,function(resp) {
+        print('handle get stylists resp:**** ' + JSON.stringify(resp))
+           if(resp["QPerson"]===0)
+               stylistQueue.color="green"
+           else
+               stylistQueue.color="red"
+        });
+        }
 
 }

@@ -70,6 +70,15 @@ function update_job(id, entry, cb) {
     request('PUT', bASE1 ,id, entry, cb)
 }
 
+function update_stylist(id, entry, cb) {
+    request('PUT', bASE2 ,id, entry, cb)
+}
+
+function register_stylist(id, entry, cb) {
+    var endpoint="register/"+id
+    request('PUT', bASE2 ,endpoint, entry, cb)
+}
+
 function assign_job(id, cb) {
     var endpoint="assign/"+id
     request('GET', bASE1 ,endpoint, null, cb)
@@ -92,8 +101,14 @@ function login_stylist(id,cb) {
     request('GET', bASE3 ,id, null, cb);
 }
 
+function login_stylist_card(uid,cb) {
+    print(bASE3);
+    request('GET', bASE3 ,uid, null, cb);
+}
+
 function ready_stylist(name,cb) {
-    request('GET', bASE3 ,name, null, cb)
+    var endpoint="ready/"+name
+    request('GET', bASE3 ,endpoint, null, cb)
 }
 
 function logoff_stylist(name,cb) {
@@ -108,6 +123,10 @@ function get_stylist(id, cb) {
     request('GET', bASE2 ,id, null, cb)
 }
 
+function get_stylist_name(name, cb) {
+    var endpoint="name/"+name
+    request('GET', bASE2 ,endpoint, null, cb)
+}
 function get_stylist_jobs(id, cb) {
     var endpoint="jobs/"+id
     request('GET', bASE2 ,endpoint, null, cb)

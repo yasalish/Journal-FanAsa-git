@@ -8,8 +8,11 @@ Rectangle {
     width: 800
     height: 480
 
+    signal onStylistCardUIDChanged()
     property string stylistName: ''
+    property string stylistCardUID: ''
 
+/*
     property var  header1: [ // widths must add to 1
         {text: 'Code',     width: 0.15},
         {text: 'Name',      width: 0.225},
@@ -17,6 +20,15 @@ Rectangle {
         {text: 'Status',   width: 0.2},
         {text: 'Queue',   width: 0.175},
     ]
+*/
+    property var  header1: [ // widths must add to 1
+        {text: 'صف',     width: 0.15},
+        {text: 'وضعیت',      width: 0.225},
+        {text: 'آدرس آی پی', width: 0.25},
+        {text: 'نام',   width: 0.2},
+        {text: 'شماره',   width: 0.175},
+    ]
+/*
     property var  header2: [ // widths must add to 1
         {text: 'ID',     width: 0.1},
         {text: 'Stylist',   width: 0.175},
@@ -25,6 +37,16 @@ Rectangle {
         {text: 'Status',   width: 0.175},
         {text: 'Queue',   width: 0.175},
     ]
+*/
+    property var  header2: [ // widths must add to 1
+        {text: 'صف',     width: 0.1},
+        {text: 'وضعیت',   width: 0.2},
+        {text: 'خدمت',   width: 0.2},
+        {text: 'مشتری',   width: 0.175},
+        {text: 'آرایشگر',   width: 0.175},
+        {text: 'شماره',   width: 0.15},
+    ]
+
     property var stylistCode:""
 
     SerialPort{
@@ -33,6 +55,11 @@ Rectangle {
                         rcount++
                         print("onDataReceived -> ",data,"\t",rcount,"\t",data.length)
                         rdata=data
+                        if(rcount==2 && data.length===18)
+                         {
+                             stylistCardUID=data.substr(8,8)
+                             print("----UID------",stylistCardUID)
+                        }
                         switch(rcount)
                             {
                                 case 1: Mifare.sendAntiCollisionCommnad();break;
@@ -50,7 +77,6 @@ Rectangle {
                              }
                     }
         }
-
     color: "#fef0f0"
     border.color: "#221919"
     FButton {
@@ -66,12 +92,22 @@ Rectangle {
                 for(var i=0;i<resp.length;i++)
                 {
                     var stylist=[]
+                    /*
                     stylist.push(resp[i]["StylistID"]);
                     stylist.push(resp[i]["Name"]);
                     stylist.push(resp[i]["IPAddr"]);
                     stylist.push(resp[i]["Status"]);
                     stylist.push(resp[i]["QPerson"]);
-                    stylists.push(stylist);
+                    */
+                    if(resp[i]["Name"]!=='Manager')
+                    {
+                        stylist.push(resp[i]["QPerson"]);
+                        stylist.push(resp[i]["Status"]);
+                        stylist.push(resp[i]["IPAddr"]);
+                        stylist.push(resp[i]["Name"]);
+                        stylist.push(resp[i]["StylistID"]);
+                        stylists.push(stylist);
+                    }
                 }
                 print(stylists)
                 table1.headerModel=header1
@@ -93,12 +129,22 @@ Rectangle {
             print('handle get stylists resp: ' + JSON.stringify(resp))
                 var stylists=[]
                 var stylist=[]
+                /*
                 stylist.push(resp["StylistID"]);
                 stylist.push(resp["Name"]);
                 stylist.push(resp["IPAddr"]);
                 stylist.push(resp["Status"]);
                 stylist.push(resp["QPerson"]);
+                */
+
+                stylist.push(resp["QPerson"]);
+                stylist.push(resp["Status"]);
+                stylist.push(resp["IPAddr"]);
+                stylist.push(resp["Name"]);
+                stylist.push(resp["StylistID"]);
                 stylists.push(stylist);
+
+
                 element1.visible=false
                 table2.headerModel=header1
                 table2.dataModel=stylists
@@ -122,12 +168,20 @@ Rectangle {
                 for(var i=0;i<resp.length;i++)
                 {
                     var job=[]
+                    /*
                     job.push(resp[i]["ID"]);
                     job.push(resp[i]["Stylist"]);
                     job.push(resp[i]["Customer"]);
                     job.push(resp[i]["Type"]);
                     job.push(resp[i]["Status"]);
                     job.push(resp[i]["QNumber"]);
+                    */
+                    job.push(resp[i]["QNumber"]);
+                    job.push(resp[i]["Status"]);
+                    job.push(resp[i]["Type"]);
+                    job.push(resp[i]["Customer"]);
+                    job.push(resp[i]["Stylist"]);
+                    job.push(resp[i]["ID"]);
                     jobs.push(job);
                 }
                 element1.visible=false
@@ -157,10 +211,10 @@ Rectangle {
         bText: "ثبت کارت آرایشگر"
         visible: false
         onClicked: {
-            serial.open()
+            serial.open(serPort)
             rcount=0
-            rdata=""
-            Mifare.sendReqACommnad();
+            rdata=""            
+            Mifare.sendReqACommnad();            
         }
     }
     Rectangle {
@@ -175,7 +229,7 @@ Rectangle {
             anchors.fill: parent
             onClicked: {
                          print('onClicked', row, JSON.stringify(rowData))
-                        stylistName=rowData[1]
+                        stylistName=rowData[3]
                         stackView.push("Stylist.qml",{stylistName : stylistName});
             }
         }
@@ -193,7 +247,7 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     print('onClicked', row, JSON.stringify(rowData))
-                    stylistName=rowData[1]
+                    stylistName=rowData[3]
                     stackView.push("Stylist.qml",{stylistName : stylistName});
                 }
             }
@@ -204,21 +258,26 @@ Rectangle {
         y: 64
         width: 123
         height: 37
-        color: "#e2fff0"
-        border.color: "#0f0e0e"
-
+        color: "#feebeb"
+        radius: 10
+        border.color: "#e6dede"
         TextInput {
             id: textInput
-            color: "#ee0d0d"
+            color: "#a60dd4"
             anchors.fill:parent
+            anchors.centerIn: parent
             text: qsTr("1")
-            anchors.rightMargin: -8
-            anchors.leftMargin: 8
-            anchors.topMargin: 15
-            anchors.bottomMargin: 15
+            anchors.verticalCenterOffset: 15
+            anchors.horizontalCenterOffset: -8
+            anchors.rightMargin: 0
+            anchors.leftMargin: 0
+            anchors.topMargin: 30
+            anchors.bottomMargin: 0
             font.bold: true
-            font.family: "Times New Roman"
-            font.pixelSize: 16
+            font.family: "B Roya"
+            font.pixelSize: 28
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
     }
     NumberPad {
@@ -233,7 +292,7 @@ Rectangle {
                 {
                       textInput.text += value;
                 }
-                else if(value==10)
+                else if(value==11)
                 {
                     textInput.text += ".";
                 }
@@ -272,4 +331,14 @@ Rectangle {
                     x: (parent.width - width) / 2
                     y: (parent.height - height) / 2
         }
+
+    onStylistCardUIDChanged:
+    {
+        var stylistid=textInput.text
+        var entry =stylistCardUID
+        Service.register_stylist(stylistid,entry,function(resp) {
+        print('handle get stylists resp: ' + JSON.stringify(resp));
+        });
+
     }
+}

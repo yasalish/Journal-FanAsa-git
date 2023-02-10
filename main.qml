@@ -24,6 +24,7 @@ ApplicationWindow {
     property var rcount: 0
     property var rdata:""
     property var code:""
+
     property var keys : [   "ffffffffffff",
                             "a0b0c0d0e0f0",
                             "a1b1c1d1e1f1",

@@ -5,6 +5,7 @@ import "HttpService.js" as Service
 Rectangle {
     width: 800
     height: 480
+    /*
     property var  header: [ // widths must add to 1
         {text: 'ID',     width: 0.1},
         {text: 'Stylist',   width: 0.175},
@@ -13,7 +14,15 @@ Rectangle {
         {text: 'Status',   width: 0.175},
         {text: 'Queue',   width: 0.175},
     ]  
-
+   */
+    property var  header: [ // widths must add to 1
+        {text: 'صف',     width: 0.1},
+        {text: 'وضعیت',   width: 0.2},
+        {text: 'خدمت',   width: 0.2},
+        {text: 'مشتری',   width: 0.175},
+        {text: 'آرایشگر',   width: 0.175},
+        {text: 'شماره',   width: 0.15},
+    ]
     color: "#fef0f0"
     border.color: "#221919"
     FButton {
@@ -28,12 +37,20 @@ Rectangle {
                 for(var i=0;i<resp.length;i++)
                 {
                     var job=[]
+                    /*
                     job.push(resp[i]["ID"]);
                     job.push(resp[i]["Stylist"]);
                     job.push(resp[i]["Customer"]);
                     job.push(resp[i]["Type"]);
                     job.push(resp[i]["Status"]);
                     job.push(resp[i]["QNumber"]);
+                    */
+                    job.push(resp[i]["QNumber"]);
+                    job.push(resp[i]["Status"]);
+                    job.push(resp[i]["Type"]);
+                    job.push(resp[i]["Customer"]);
+                    job.push(resp[i]["Stylist"]);
+                    job.push(resp[i]["ID"]);
                     jobs.push(job);
                 }
                 print(jobs)
@@ -53,12 +70,22 @@ Rectangle {
             print('handle get jobs resp: ' + JSON.stringify(resp));
             var jobs=[]
             var job=[]
+            /*
             job.push(resp["ID"]);
             job.push(resp["Stylist"]);
             job.push(resp["Customer"]);
             job.push(resp["Type"]);
             job.push(resp["Status"]);
             job.push(resp["QNumber"]);
+            */
+
+            job.push(resp["QNumber"]);
+            job.push(resp["Status"]);
+            job.push(resp["Type"]);
+            job.push(resp["Customer"]);
+            job.push(resp["Stylist"]);
+            job.push(resp["ID"]);
+
             print(job)
             jobs.push(job);
             element1.visible=false
@@ -78,12 +105,14 @@ Rectangle {
             print('handle get jobs resp: ' + JSON.stringify(resp));
             var jobs=[]
             var job=[]
-            job.push(resp["ID"]);
-            job.push(resp["Stylist"]);
-            job.push(resp["Customer"]);
-            job.push(resp["Type"]);
+
+            job.push(resp["QNumber"]);
             job.push(resp["Status"]);
-             job.push(resp["QNumber"]);
+            job.push(resp["Type"]);
+            job.push(resp["Customer"]);
+            job.push(resp["Stylist"]);
+            job.push(resp["ID"]);
+
             print(job)
             jobs.push(job);
             element1.visible=false
@@ -138,21 +167,26 @@ Rectangle {
         y: 53
         width: 123
         height: 37
-        color: "#e2fff0"
-        border.color: "#0f0e0e"
-
+        color: "#feebeb"
+        radius: 10
+        border.color: "#e6dede"
         TextInput {
             id: textInput
-            color: "#ee0d0d"
+            color: "#a60dd4"
             anchors.fill:parent
+            anchors.centerIn: parent
             text: qsTr("1")
-            anchors.rightMargin: -8
-            anchors.leftMargin: 8
-            anchors.topMargin: 15
-            anchors.bottomMargin: 15
+            anchors.verticalCenterOffset: 15
+            anchors.horizontalCenterOffset: -8
+            anchors.rightMargin: 0
+            anchors.leftMargin: 0
+            anchors.topMargin: 30
+            anchors.bottomMargin: 0
             font.bold: true
-            font.family: "Times New Roman"
-            font.pixelSize: 16
+            font.family: "B Roya"
+            font.pixelSize: 28
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
     }
     NumberPad {
@@ -167,7 +201,7 @@ Rectangle {
                 {
                       textInput.text += value;
                 }
-                else if(value==10)
+                else if(value==11)
                 {
                     textInput.text += ".";
                 }

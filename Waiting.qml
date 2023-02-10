@@ -7,11 +7,12 @@ Rectangle {
     property alias stylistName: label1.text
     property int getJob:0
     property var  header: [ // widths must add to 1
-        {text: 'ID',     width: 0.1},
-        {text: 'Stylist',   width: 0.225},
-        {text: 'Customer',   width: 0.225},
-        {text: 'Type',   width: 0.225},
-        {text: 'Status',   width: 0.225},
+        {text: 'صف',     width: 0.1},
+        {text: 'وضعیت',   width: 0.2},
+        {text: 'خدمت',   width: 0.2},
+        {text: 'مشتری',   width: 0.175},
+        {text: 'آرایشگر',   width: 0.175},
+        {text: 'شماره',   width: 0.15},
     ]
     property int jobID:-1
     width: 800
@@ -61,7 +62,7 @@ Rectangle {
     }
     Text {
         id: element3
-        x: 232
+        x: 199
         y: 48
         color: "#0d6583"
         text: "یک کار به شما اختصاص یافت!"
@@ -116,11 +117,12 @@ Rectangle {
                 var jobs=[]
                 var job=[]
                 jobID=resp["ID"];
-                job.push(resp["ID"]);
-                job.push(resp["Stylist"]);
-                job.push(resp["Customer"]);
-                job.push(resp["Type"]);
+                job.push(resp["QNumber"]);
                 job.push(resp["Status"]);
+                job.push(resp["Type"]);
+                job.push(resp["Customer"]);
+                job.push(resp["Stylist"]);
+                job.push(resp["ID"]);
                 print(job)
                 print(jobID)
                 jobs.push(job);
@@ -153,10 +155,16 @@ Rectangle {
         width:150
         bText:"آماده برای پذیرش کار"
         onClicked: {
+            Service.get_stylist_name(stylistName,function(resp) {
+            print('handle get stylists resp:**** ' + JSON.stringify(resp))
+               if(resp["Status"]==="آماده")
+                   stylistStatus.color="green"
+            });
             button.visible=false;
             element.visible=true;
             busyIndicator.visible=true;
             print("getJob=",getJob)
+            socket.active=true
             delay(2000, function() {
                 print("And I'm printed after 1 second!***", getJob)
                 socket.sendTextMessage(stylistName)                
@@ -181,30 +189,39 @@ Rectangle {
     }
     FButton {
         id: button2
-        x: 331
-        y: 330
+        x: 297
+        y: 331
         bText:"پذیرش کار"
         visible:false
         onClicked: {
             Service.accept_job(jobID,function(resp) {
-            print('handle get jobs resp: ' + JSON.stringify(resp));
+            print('handle get jobs resp:---->1' + JSON.stringify(resp));
             element3.visible=false
             element4.visible=true
             button4.visible=true
             var jobs=[]
             var job=[]
-            job.push(resp["ID"]);
-            job.push(resp["Stylist"]);
-            job.push(resp["Customer"]);
-            job.push(resp["Type"]);
+            job.push(resp["QNumber"]);
             job.push(resp["Status"]);
+            job.push(resp["Type"]);
+            job.push(resp["Customer"]);
+            job.push(resp["Stylist"]);
+            job.push(resp["ID"]);
             print(job)
             jobs.push(job);
             table2.dataModel=jobs
             element2.visible=true
             button2.visible=false
-            });
-           // stackView.push("Stylist.qml",{stylistName : stylistName});
+            stylistStatus.color="red"
+            Service.get_stylist_name(stylistName,function(resp) {
+                print('handle get stylists resp:****> 2 ' + JSON.stringify(resp))
+                   if(resp["QPerson"]===0)
+                       stylistQueue.color="green"
+                   else
+                       stylistQueue.color="red"
+                });
+           });
+
         }
     }
     FButton {
@@ -220,8 +237,8 @@ Rectangle {
     }
     Rectangle {
             id: element2
-            x: 121
-            y: 110
+            x: 55
+            y: 114
             width: 559
             height: 118
             visible: false
@@ -231,6 +248,94 @@ Rectangle {
                 headerModel: header
                 onClicked: print('onClicked', row, JSON.stringify(rowData))
             }
+        }
+    Rectangle {
+        id: stylistStatus
+        x: 635
+        y: 157
+        width: 98
+        height: 76
+        color: "blue"
+        radius: 32
+    }
+
+    Rectangle {
+        id: stylistQueue
+        x: 635
+        y: 267
+        width: 98
+        height: 76
+        color: "#ffffff"
+        radius: 32
+    }
+    SequentialAnimation {
+            loops: Animation.Infinite
+            running: true
+            OpacityAnimator {
+                        target: stylistStatus
+                        from: 0.5
+                        to: 1
+                        duration: 500
+                    }
+            OpacityAnimator {
+                        target: stylistStatus
+                        from: 1
+                        to: 0.5
+                        duration: 500
+            }
+    }
+    SequentialAnimation {
+            loops: Animation.Infinite
+            running: true
+            OpacityAnimator {
+                        target: stylistQueue
+                        from: 0.5
+                        to: 1
+                        duration: 500
+                    }
+            OpacityAnimator {
+                        target: stylistQueue
+                        from: 1
+                        to: 0.5
+                        duration: 500
+            }
+    }
+    Label {
+        id: label2
+        x: 635
+        y: 122
+        width: 80
+        height: 13
+        color: "#a60dd4"
+        text: qsTr("وضعیت")
+        font.pointSize: 18
+        font.family: "B Roya"
+        font.bold: true
+    }
+
+    Label {
+        id: label3
+        x: 621
+        y: 234
+        width: 80
+        height: 13
+        color: "#a60dd4"
+        text: qsTr("صف")
+        font.family: "B Roya"
+        font.pointSize: 18
+        font.bold: true
+    }
+    Component.onCompleted: {
+        Service.get_stylist_name(stylistName,function(resp) {
+        print('handle get stylists resp:**** ' + JSON.stringify(resp))
+           if(resp["QPerson"]===0)
+               stylistQueue.color="green"
+           else
+              {
+                  stylistQueue.color="red"
+                  stylistStatus.color="green"
+              }
+        });
         }
 
 }

@@ -25,15 +25,16 @@ Page {
         y: 69
         width: 200
         height: 200
-        color: "#f0f5d6"
+        color: "#fef0f0"
+        border.color: "#221919"
         anchors.fill:parent
         Label {
             color: "#c71585"
-            text: qsTr("آدرس آی پی سرور سالن:")
+            text: qsTr("آدرس آی پی سرور :")
             font.family: "B Roya"
             font.bold: true
-            anchors.verticalCenterOffset: -158
-            anchors.horizontalCenterOffset: 193
+            anchors.verticalCenterOffset: -156
+            anchors.horizontalCenterOffset: 220
             font.pointSize: 25
             anchors.centerIn: rectangle1
         }
@@ -41,23 +42,28 @@ Page {
         Rectangle {
             id: rectangle
             x: 120
-            y: 56
+            y: 60
             width: 317
             height: 51
-            color: "#fceded"
-            radius: 0
-            border.color: "#d40e0e"
-
+            color: "#f4e9e9"
+            radius: 10
+            border.color: "#e6dede"
             TextInput {
                 id: textInput
                 anchors.fill:rectangle                
                 width: parent.width
                 height: parent.height
-                color: "#f05c5c"
-                text: qsTr("192.168.1.7")                
+                color: "#a60dd4"
+                text: qsTr("192.168.1.7")
+                anchors.rightMargin: 0
+                anchors.bottomMargin: 0
+                anchors.leftMargin: 0
+                anchors.topMargin: 0
+                font.family: "B Roya"
                 horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
                 font.weight: Font.Bold
-                font.pixelSize: 28
+                font.pixelSize: 34
                 onActiveFocusChanged: {
                 if (activeFocus) {
                                 print("-----> Hello Text1")
@@ -83,21 +89,23 @@ Page {
             y: 131
             width: 114
             height: 51
-            color: "#fceded"
-            radius: 0
-            border.color: "#d40e0e"
+            color: "#f4e9e9"
+            radius: 10
+            border.color: "#e6dede"
             TextInput {
                 id: textInput2
                 x: 0
-                y: 8
+                y: 0
                 anchors.fill:rectangle
                 width: parent.width
                 height: parent.height
-                color: "#f05c5c"
+                color: "#a60dd4"
                 text: qsTr("3")
+                font.family: "B Roya"
                 horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
                 font.weight: Font.Bold
-                font.pixelSize: 28
+                font.pixelSize: 34
                 onActiveFocusChanged: {
                 if (activeFocus) {
                         print("-----> Hello Text2")
@@ -138,7 +146,12 @@ var fileData="{\"IPAddr\": \""+ipAddress+"\", \"SerPort\": \""+serPort+"\"}";
             x: 420
             y: 298
             bText: "پاک کردن"
-            onClicked: textInput.text=""
+            onClicked:{
+                if(activeInput==1)
+                        textInput.text = "";
+                 else if(activeInput==2)
+                        textInput2.text = "";
+            }
 
         }
         NumberPad {
@@ -157,7 +170,7 @@ var fileData="{\"IPAddr\": \""+ipAddress+"\", \"SerPort\": \""+serPort+"\"}";
                          else if(activeInput==2)
                                 textInput2.text += value;
                     }
-                    else if(value==10)
+                    else if(value==11)
                     {
                         if(activeInput==1)
                               textInput.text += ".";

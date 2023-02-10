@@ -1,3 +1,9 @@
+function sendRFOff()
+{
+    print("sendRFOff")
+    var command="02-00-01-11-10"
+    serial.onWriteData(command)
+}
 function sendReqACommnad()
 {
     rcount=0

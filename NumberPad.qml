@@ -37,8 +37,12 @@ Item {
             btn.text = num
             btn.width = 65
             btn.height = 65
-            btn.font.pixelSize=17
-            btn.font.bold=true
+            btn.font.pixelSize=22
+            btn.font.bold=true           
+            btn.font.family="B Roya"
+            if(num===0)
+                btn.font.pixelSize=26
+
             num++
         }
         num=10
@@ -46,22 +50,24 @@ Item {
                     RoundButton {id: btn' + i +';onClicked:doClicked('+ num +');\
                      background: Rectangle {radius: parent.radius;color: "#b0e0e6"}\
                      }',grid,"DynamicallyLoaded")
-        btn.text ='.'
+        btn.text ="\u232b"
         btn.width = 65
         btn.height = 65
-        btn.font.pixelSize=17
+        btn.font.pixelSize=22
         btn.font.bold=true
+        btn.font.family="B Roya"
         //var obj = grid.children[grid.children.length - 1]
         num=11
         btn = Qt.createQmlObject('import QtQuick 2.0; import QtQuick.Controls 2.3; \
                     RoundButton {id: btn' + i +';onClicked:doClicked('+ num +');\
                      background: Rectangle {radius: parent.radius;color: "#b0e0e6"}\
                      }',grid,"DynamicallyLoaded")
-        btn.text = "\u232b"
+        btn.text = "."
         btn.width = 65
         btn.height = 65
-        btn.font.pixelSize=17
+        btn.font.pixelSize=22
         btn.font.bold=true
+        btn.font.family="B Roya"
     }
 
 

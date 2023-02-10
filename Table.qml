@@ -35,6 +35,7 @@ Item { // size controlled by width
             width: parent.width;  height: 0.5 * parent.height
             color: parent.color
             anchors.bottom: parent.bottom
+
         }
 
         ListView { // header
@@ -49,8 +50,12 @@ Item { // size controlled by width
                     x: 0.02 * root.width
                     text: modelData.text
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: 0.04 * root.width
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: 0.045 * root.width
+                    font.family: "B Roya"
+                    font.bold: true
                     color: 'white'
+
                 }
             }
         }
@@ -81,7 +86,11 @@ Item { // size controlled by width
                             x: 0.03 * root.width
                             text: modelData
                             anchors.verticalCenter: parent.verticalCenter
-                            font.pixelSize: 0.03 * root.width
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            font.pixelSize: 0.035 * root.width
+                            font.family: "B Roya"
+                            font.bold: true
+
                         }
                     }
                 }
